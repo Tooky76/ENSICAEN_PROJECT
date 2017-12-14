@@ -91,3 +91,49 @@ static void init_partition_error_priv(rag graph) {
         }
     }
 }
+
+/*Calcul de la meilleure fusion*/
+
+extern double RAG_give_closest_region(rag graph,int* block1,int* block2) {
+  int i,j,k;
+  double MA,MB,new_error,avg;
+  double *M1A,*M1B;
+  double min_error=NULL;
+
+  for (i=0;i<graph.nb_blocks;i++) {
+    if (graph.m[i].father==i) {
+      /*On regarde déjà le couple block i et son voisin d'à côté s'il en a un*/
+      if (graph.neighbors[i].block!=NULL) {
+	j=graph.neighbors[i].block;
+	
+	M0A=graph.m[i].M0;
+	M0B=graph.m[j].M0;
+	
+	avg=pow(M1A[0]-M1B[0],2)+pow(M1A[1]-M1B[1],2)+pow(M1A[2]-M1B[2],2);
+	new_error=(M0A*M0B)*avg/(M0A+M0B);
+	
+	if (min_error==NULL || new_error<min_error) {
+	  min_error=new_error;
+	  *block1=i;
+	  *block2=j;
+	}
+      }
+      /* On teste avec son voisin du dessous s'il en a un*/
+      if (graph.neighbors[i].next!=NULL) {
+	j=graph.neighbors[i].next;
+	M0B=graph.m[j].M0;
+
+	avg=pow(M1A[0]-M1B[0],2)+pow(M1A[1]-M1B[1],2)+pow(M1A[2]-M1B[2],2);
+	new_error=(M0A*M0B)*avg/(M0A+M0B);
+
+
+	if (min_error>new_error) {
+	  min_error=new_error;
+	  *block1=i;
+	  *block2=j;
+	}
+      }
+    }
+  }
+  return min_error;
+}
