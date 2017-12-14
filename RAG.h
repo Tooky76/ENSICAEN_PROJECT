@@ -17,4 +17,6 @@ static void init_neighbors_priv(rag,int,int);
 
 static void init_partition_error_priv(rag);
 
+extern double RAG_give_closest_region(rag,int*,int*);
+
 #endif
