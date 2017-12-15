@@ -74,7 +74,13 @@ static void init_neighbors_priv(rag graph ,int n ,int m) {
     for ( i=1 ; i<=graph.nb_blocks ; i++ ) {
 
         graph.neighbors[i].block = (i%n != 0) ? i+1 : NULL;
-        graph.neighbors[i].next = (i+n < graph.nb_blocks) ? graph.neighbors[i+n] : NULL;
+	if ( i+n < graph.nb_blocks ) {
+            graph.neighbors[i].next = graph.neighbors[i+n];
+            (graph.neighbors[i].next).block = i+n;
+            (graph.neighbors[i].next).next = NULL;    
+        } else {
+            graph.neighbors[i].next = NULL;
+        }
     }
 }
 
