@@ -143,3 +143,84 @@ extern double RAG_give_closest_region(rag graph,int* block1,int* block2) {
   }
   return min_error;
 }
+
+
+/*
+ * 
+ * On merge le i-ème block avec le j-ème block et on suppose que i < j
+ *
+ */
+extern void RAG_merge_region(rag graph, int i, int j) {
+
+    graph.father[i] = j;   /* Mise à jour du tableau father */
+    update_moment(graph,i,j);
+    update_neighbors(graph,i,j);
+    update_error(graph,i,j);
+
+}
+
+static void update_moment(rag graph, int i, int j) {
+
+    int k;
+
+    graph.m[j].M0 += graph.m[i].M0;
+    for ( k=0 ; k<3 ; k++ ) {
+        graph.m[j].M1 += graph.m[i].M1;
+        graph.m[j].M2 += graph.m[i].M2;
+    }
+}
+
+static void update_neighbors(rag graph, int i, int j) (
+
+    cellule cel;
+
+    cel = graph.neighbors[j];
+    insert_in_sort_list(cel,(graph.neighbors[i].next).block);
+    graph.neighbors[i].block = NULL; /* Mise à zéro des voisin du block i */
+    graph.neighbors[i].next = NULL; /* Suppression des voisins du block i */
+)
+
+static void update_error(rag graph, int i, int j) {
+
+    long double tmp;
+    long double avg_i;
+    long double avg_j;
+
+    avg_i = (graph.m[i].M1/graph.m[i].M0);
+    avg_j = (graph.m[j].M1/graph.m[j].M0);
+    tmp = (graph.m[i].M0*graph.m[j].M0)/(graph.m[i].M0 + graph.m[j].M0) * (avg_i - avg_j)*(avg_i - avg_j);
+    graph.erreur_partition += tmp;
+}
+
+static void insert_in_sort_list(cellule neighbors, int element) { /* TD d'algo insertion dans une liste simple triée */
+
+    cellule previous;
+    cellule current;
+    cellule cel;
+    int find;
+
+    find = 0;
+
+    cel.block = element;
+    if ( neighbors.block == NULL ) {
+        cel.next = NULL;
+        neighbors = cel;
+        return;
+    }
+    if ( neighbors.block > element ) {
+        cel.next = neighbors
+        neighbors = cel;
+        return;
+    }
+    current = neighbors;
+    do {
+        previous = current;
+        current = current.next;
+        find = ( current == NULL ) ? 1 : 0;
+        if ( !find ) {
+            find = ( current.block > element ) ? 1 :0;
+        }
+    } while ( !find );
+    cel.next = current;
+    previous.next = cel;
+}
