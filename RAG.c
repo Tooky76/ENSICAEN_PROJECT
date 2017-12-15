@@ -49,7 +49,7 @@ static void init_moments_priv(rag graph ,int n ,int m) {
     graph.m = malloc(graph.nb_blocks*sizeof(moments));
     
     for ( i=0 ; i<n*m ; i++ ) {
-        give_moments(graph.image, i, n, m, graph.m[i].M0;, graph.m[i].M2, graph.m[i].M3);
+        give_moments(graph.image, i, n, m, &(graph.m[i].M0), graph.m[i].M2, graph.m[i].M3);
     }
 
 }
