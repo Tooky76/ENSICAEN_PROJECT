@@ -13,12 +13,10 @@ extern void give_moments(image self, int block_id, int n, int m, int *M1, double
     /* Initialisation des moments */
 
     *M1 = 0;
-    *m2[0] = 0.0;
-    *M2[1] = 0.0;
-    *M2[2] = 0.0;
-    *M3[0] = 0.0;
-    *M3[1] = 0.0;
-    *M3[2] = 0.0;
+    for ( i=0 ; i<3 ; i++ ) {
+        M2[i] = 0.0;
+        M3[i] = 0.0;
+    }
 
     /* Fin de l'initialisation */
 
