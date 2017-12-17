@@ -1,5 +1,9 @@
 #include "RAG.h"
 
+/**
+ * @file RAG.c
+ */
+
 struct moments
 {
     int M0;
@@ -25,6 +29,14 @@ typedef struct RAG {
     cellule neighbors;
 } rag;
 
+/**
+ * Créer le graph utiliser pour gérer les blocks
+ *
+ * @param self image traitée
+ * @param n nombre de blocks sur la largeur
+ * @param m nombre de blocks sur la longueur
+ */
+
 extern rag create_RAG(image self ,int n ,int m) {
 
     rag graph;
@@ -40,8 +52,12 @@ extern rag create_RAG(image self ,int n ,int m) {
 
 }
 
-
-
+/**
+ * Cette fonction associe à chaque block ses moments dans la grap
+ * @param graph le graph utilisé
+ * @param n nombre de blocks sur la largeur
+ * @param m nombre de blocks sur la longueur
+ */
 static void init_moments_priv(rag graph ,int n ,int m) {
 
     int i;
@@ -54,6 +70,10 @@ static void init_moments_priv(rag graph ,int n ,int m) {
 
 }
 
+/**
+ * Cette fonction initialise le block père de chaque block sur lui-même 
+ * @param graph le graph utilisé
+ */
 static void init_father_priv(rag graph) {
 
     int i;
@@ -64,6 +84,13 @@ static void init_father_priv(rag graph) {
         graph.father[i] = i;
     }
 }
+
+/**
+ * Cette fonction donne à chaque block ses voisins de droite et du dessous s'ils existent.
+ * @param graph le graph utilisé
+ * @param n nombre de blocks sur la largeur
+ * @param m nombre de blocks sur la longueur
+ */
 
 static void init_neighbors_priv(rag graph ,int n ,int m) {
 
@@ -84,6 +111,11 @@ static void init_neighbors_priv(rag graph ,int n ,int m) {
     }
 }
 
+/**
+ * Cette fonction calcule l'erreur quadratique de chaque block dans la graph.
+ * @param graph le graph utilisé
+ */
+
 static void init_partition_error_priv(rag graph) {
 
     int i, j;
@@ -98,7 +130,17 @@ static void init_partition_error_priv(rag graph) {
     }
 }
 
-/*Calcul de la meilleure fusion*/
+/**
+ * Cette fonction parcourt graph pour identifier ,grâce au calcule de l'erreur quadratique engendrée par leur
+ * potentielle fusion, la meilleure fusion.
+ *
+ * @return Cette fonction retourne l'erreur calculée la plus basse et modifie les deux pointeurs sur les indices
+ * des blocks correspondants.
+ *  
+ * @param graph le graph utilisé.
+ * @param block1 pointeur sur l'indice du premier block à fusionner.
+ * @param block2 pointeur sur l'indice du second block à fusionner.
+ */
 
 extern double RAG_give_closest_region(rag graph,int* block1,int* block2) {
   int i,j,k;
@@ -145,10 +187,12 @@ extern double RAG_give_closest_region(rag graph,int* block1,int* block2) {
 }
 
 
-/*
+/**
+ * Cette fonction merge le i-ème block avec le j-ème block et suppose que i < j.
  * 
- * On merge le i-ème block avec le j-ème block et on suppose que i < j
- *
+ * @param graph le graph utilisé.
+ * @param i le block à fusionner.
+ * @param j l'autre block à fusionner et le nouveau father de i.
  */
 extern void RAG_merge_region(rag graph, int i, int j) {
 
@@ -158,6 +202,14 @@ extern void RAG_merge_region(rag graph, int i, int j) {
     update_error(graph,i,j);
 
 }
+
+/**
+ * Cette fonction met à jour les moments du block j.
+ *
+ * @param graph le graph utilisé.
+ * @param i le block fusionné utilisé pour le calcul des moments.
+ * @param j le block dont on modifie les moments.
+ */
 
 static void update_moment(rag graph, int i, int j) {
 
@@ -170,7 +222,15 @@ static void update_moment(rag graph, int i, int j) {
     }
 }
 
-static void update_neighbors(rag graph, int i, int j) (
+/**
+ * Cette fonction met à jour les voisins des blocks fusionnés.
+ *
+ * @param graph le graph utilisé.
+ * @param i le block qui perd ses voisins.
+ * @param j le block qui hérie des voisins de i.
+ */
+
+static void update_neighbors(rag graph, int i, int j) {
 
     cellule cel;
 
@@ -178,7 +238,15 @@ static void update_neighbors(rag graph, int i, int j) (
     insert_in_sort_list(cel,(graph.neighbors[i].next).block);
     graph.neighbors[i].block = NULL; /* Mise à zéro des voisin du block i */
     graph.neighbors[i].next = NULL; /* Suppression des voisins du block i */
-)
+}
+
+/**
+ * Cette fonction met à jour l'erreur quadratique dans le block fusionné.
+ *
+ * @param graph le graph utilisé.
+ * @param i le premier block utilisé
+ * @param j le second blok utilisé.
+ */
 
 static void update_error(rag graph, int i, int j) {
 
