@@ -98,7 +98,7 @@ static void init_neighbors_priv(rag graph ,int n ,int m) {
     
     graph.neighbors = malloc(graph.nb_blocks*sizeof(struct cellule));
 
-    for ( i=1 ; i<=graph.nb_blocks ; i++ ) {
+    for ( i=0 ; i<graph.nb_blocks ; i++ ) {
 
         graph.neighbors[i].block = (i%n != 0) ? i+1 : NULL;
 	if ( i+n < graph.nb_blocks ) {
