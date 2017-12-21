@@ -125,7 +125,7 @@ static void init_partition_error_priv(rag graph) {
     for ( i=0 ; i<graph.nb_blocks ; i++ ) {
         graph.erreur_partition[i] = 0;
         for ( j=0 ; j<3 ; j++ ) {
-            graph.erreur_partition[i] += graph.m[i].M2 - (graph.m[i].M1/graph.m[i].M0)*(graph.m[i].M1/graph.m[i].M0);
+           graph.erreur_partition[i] += graph.m[i].M2[j] - (graph.m[i].M1[j]/graph.m[i].M0)*(graph.m[i].M1[j]/graph.m[i].M0);
         }
     }
 }
@@ -217,8 +217,8 @@ static void update_moment(rag graph, int i, int j) {
 
     graph.m[j].M0 += graph.m[i].M0;
     for ( k=0 ; k<3 ; k++ ) {
-        graph.m[j].M1 += graph.m[i].M1;
-        graph.m[j].M2 += graph.m[i].M2;
+        graph.m[j].M1[k] += graph.m[i].M1[k];
+        graph.m[j].M2[k] += graph.m[i].M2[k];
     }
 }
 
