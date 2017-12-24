@@ -1,0 +1,23 @@
+CC = gcc
+CFLAG = -Wall
+LIBS = -L/
+OBJ = func.o test_func.o image.o RAG.o
+OUTPUT = testimage
+
+$(OUTPUT): $(OBJ) 
+	$(CC) $(OBJ) -o $@
+
+clean:
+	rm -f $(OUTPUT) $(OBJ)
+
+test_func.o: test_func.c
+	$(CC) $(CFLAG) -c test_func.c -o test_func.o
+
+image.o: image.c
+	$(CC) $(CFLAG) -c image.c -o image.o
+
+func.o: func.c
+	$(CC) $(CFLAG) -c func.c -o func.o
+
+RAG.o: RAG.c
+	$(CC) $(CFLAG) -c RAG.c -o RAG.o
