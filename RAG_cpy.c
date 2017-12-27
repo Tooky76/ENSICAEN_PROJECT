@@ -40,7 +40,7 @@ static void init_father_priv(rag graph) {
     }
 }
 
-static void init_neighbors_priv(rag graph ,int n ,int m) {
+static void init_neighbors_priv(rag graph ,int n ,int m) { /* A revoir pour m */
 
     int i;
     
@@ -72,7 +72,7 @@ static void init_partition_error_priv(rag graph) {
 }
 
 
-extern double RAG_give_closest_region(rag graph, int* a, int* b) { /* Ajouter la fonctionnalité pour plusieurs voisins */
+extern double RAG_give_closest_region(rag graph, int* a, int* b) {
 
     int i;
     int k;
@@ -100,7 +100,7 @@ extern double RAG_give_closest_region(rag graph, int* a, int* b) { /* Ajouter la
                 if ( error < 0  || tmp < error ) {
                     error = tmp;
                     *a = i;
-                    *b = graph->neighbors[i].block;
+                    *b = fatherof;
                 }
                 current = current->next;
             }
@@ -114,7 +114,7 @@ extern double RAG_give_closest_region(rag graph, int* a, int* b) { /* Ajouter la
             if ( error < 0  || tmp < error ) {
                 error = tmp;
                 *a = i;
-                *b = graph->neighbors[i].block;
+                *b = fatherof;
             }
         }
     }
@@ -128,6 +128,14 @@ extern double RAG_give_closest_region(rag graph, int* a, int* b) { /* Ajouter la
  *
  */
 extern void RAG_merge_region(rag graph, int i, int j) {
+
+    int tmp;
+
+    if ( i > j ) {
+        tmp = i;
+        i = j;
+        j = tmp;
+    }
 
     graph->father[i] = j;   /* Mise à jour du tableau father */
     update_moment(graph,i,j);
@@ -151,22 +159,19 @@ static void update_neighbors(rag graph, int i, int j) {
     cellule cel;
     cellule previous, current;
 
-    insert_in_sort_list(&(graph->neighbors[j]),(graph->neighbors[i].next)->block);  /* Il faut faire attention car neighbors[i].next peut être une adresse nulle */
-
-    previous = &(graph->neighbors[i]);    /* Suppression en cascade des blocs précedents de neighbors[i] */
-    current = previous->next;
+    current = &(graph->neighbors[i]);    /* Suppression en cascade des blocs précedents de neighbors[i] */
+    previous = current;
     while (current->next != NULL) {
-        previous->block = NULL;
-        previous->next = NULL;
-        free(previous);
+        if ( current->block > j ) {
+            insert_in_sort_list(&(graph->neighbors[j]),current->block);
+        }
+        current->block = NULL;
         previous = current;
-        current = previous->next;
+        current = current->next;
+        previous->next = NULL;
     }
-    previous->block = NULL;
-    previous->next = NULL;
-    free(previous);
+    insert_in_sort_list(&(graph->neighbors[j]),current->block);
     current->block = NULL;
-    free(current);
 }
 
 static void update_error(rag graph, int i, int j) {
