@@ -1,9 +1,34 @@
 #ifndef RAG_H
 #define RAG_H
 
-#include "func.h"
-#include <stdlin.h>
+#include <stdlib.h>
 #include <stdio.h>
+
+struct moments
+{
+    int M0;
+    double M1[3];
+    double M2[3];
+};
+
+typedef struct moments* moments;
+
+typedef struct cellule* cellule;
+
+struct cellule
+{
+    int block;
+    cellule next;
+};
+
+struct RAG {
+    image  img;
+    int nb_blocks;
+    long double erreur_partition;
+    moments m;
+    int * father;
+    cellule neighbors;
+};
 
 typedef struct RAG * rag;
 
