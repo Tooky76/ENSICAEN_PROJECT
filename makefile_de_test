@@ -1,7 +1,7 @@
 CC = gcc
 CFLAG = -Wall
 LIBS = -L/
-OBJ = func.o test_func.o image.o RAG.o
+OBJ = func.o test_func.o image.o RAG.o iterative_fusion.o
 OUTPUT = testimage
 
 $(OUTPUT): $(OBJ) 
@@ -18,6 +18,10 @@ image.o: image.c
 
 func.o: func.c
 	$(CC) $(CFLAG) -c func.c -o func.o
+
+
+iterative_fusion.o: iterative_fusion.c
+	$(CC) $(CFLAG) -c iterative_fusion.c -o iterative_fusion.o
 
 RAG.o: RAG.c
 	$(CC) $(CFLAG) -c RAG.c -o RAG.o
