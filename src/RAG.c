@@ -174,7 +174,7 @@ static void update_neighbors(rag graph, int i, int j) {
     cellule previous, current;
 
     current= &(graph->neighbors[i]);    /* Suppression en cascade des blocs précedents de neighbors[i] */
-    previous = previous->next;
+    previous = current;
     while (current->next != NULL) {
       if ( current->block > j ) {
 	insert_in_sort_list(&(graph->neighbors[j]),current->block);
