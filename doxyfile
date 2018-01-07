@@ -1,0 +1,6 @@
+PROJECT_NAME = TPE Huraut Monfort
+OUTPUT_DIRECTORY = ./doc/
+INPUT = ./src/RAG.c ./src/main.c ./src/func.c ./src/iterative_fusion.c ./inc/RAG.h ./inc/iterative_fusion/h ./inc/func.h
+FILE_PATTERNS = *.h *.c
+GENERATE_HTML = YES
+GENERATE_LATEX = YES
