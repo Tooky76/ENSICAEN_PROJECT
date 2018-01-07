@@ -17,6 +17,11 @@ $(B): image.o func.o RAG.o iterative_fusion.o $(B).o
 	$(CC) $(O_PATH)$(B).o $(O_PATH)RAG.o $(O_PATH)func.o $(O_PATH)image.o $(O_PATH)iterative_fusion.o -o $(B_PATH)$@
 
 image.o: $(C_PATH)image.c
+	mkdir -p bin
+	mkdir -p obj
+	mkdir -p images
+	mkdir -p images/images
+	mkdir -p images/saved_images
 	$(CC) $(C_FLAG) $^ -c -I $(H_PATH) -o $(O_PATH)$@
 
 func.o: $(C_PATH)func.c
