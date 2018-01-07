@@ -81,8 +81,7 @@ extern void give_moments(image self, int block_id, int n, int m, int *M0, double
 		    }*/
             }
             COORDX(coord) = (block_id / m) * block_width;
-	    COORDY(coord)++;
-            if ( image_move_to(self,&coord) == faux ) {
+	    if ( image_move_to(self,&coord) == faux ) {
                 printf("[ERREUR] 3\n");
                 return;
             }
